@@ -12,6 +12,9 @@ services:
       - redis
     env_file:
       - .env
+    volumes:
+      # 將共享的資料夾掛載進容器，確保資料庫是同一個
+      - shared-data:/app/data
 
   # 2. 內場廚房 (Celery Worker)
   worker:
@@ -21,9 +24,16 @@ services:
       - redis
     env_file:
       - .env
+    volumes:
+      # Worker 也掛載同一個資料夾
+      - shared-data:/app/data
 
   # 3. 佈告欄 (Redis)
   redis:
     image: redis:alpine
     ports:
       - "6379:6379"
+
+# 宣告一個全局的共用儲存空間
+volumes:
+  shared-data:
