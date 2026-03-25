@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>微型電商</title>
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
+</head>
+<body>
+    <h1>商品列表</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>商品</th><th>價格</th><th>庫存</th><th>購買</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for p in products %}
+            <tr>
+                <td>{{ p.name }}</td>
+                <td>${{ p.price }}</td>
+                <td>{{ p.stock }}</td>
+                <td>
+                    <button hx-post="/orders/?product_id={{ p.id }}" hx-target="body">
+                        立即購買
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
