@@ -25,10 +25,10 @@ def test_ecpay_checksum_generation(monkeypatch):
         "TradeDesc": "Test Item"
     }
     
-    # 執行你的演算法
+    # 演算法
     mac_value = generate_check_mac_value(mock_params)
     
-    # 斷言：確保產出的字串是 SHA256 加密後的大寫字串
+    # 斷言：確保產出的字串是 SHA256 加密後的實例，長度64，大寫
     assert isinstance(mac_value, str)
-    assert len(mac_value) == 64 # SHA256 長度為 64
-    assert mac_value.isupper() # 必須全大寫
+    assert len(mac_value) == 64           # SHA256 長度為 64
+    assert mac_value.isupper() 

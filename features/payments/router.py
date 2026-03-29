@@ -1,10 +1,6 @@
-# features/payments/router.py
 from fastapi import APIRouter, Request, Depends
 from sqlmodel import Session
 from core.database import get_session
-
-# 移除舊的 event_bus
-# from core.event_bus import event_bus 
 
 from features.orders.models import Order
 from .ecpay_service import verify_ecpay_checksum
@@ -35,7 +31,6 @@ async def ecpay_webhook(request: Request, session: Session = Depends(get_session
             session.add(order)
             session.commit()
             
-            # 🔴 核心亮點：將「扣庫存與寄信」這件耗時任務，丟入 Redis 佇列，讓 API 瞬間回傳 1|OK 給綠界
             process_payment_success_task.delay(order.id)
             print(f" [成功] 訂單 {order_id} 付款完成，已推送任務至 Celery Redis Broker。")
             

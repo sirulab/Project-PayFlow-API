@@ -1,14 +1,11 @@
-# core/celery_app.py
 from celery import Celery
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# 預設連線到本地端的 Redis 伺服器
 redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 
-# 初始化 Celery
 celery_app = Celery(
     "payflow_tasks",
     broker=redis_url,
