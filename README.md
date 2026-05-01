@@ -98,7 +98,7 @@ MAIL_TO=customer@example.com
 # 綠界測試環境金鑰
 ECPAY_MERCHANT_ID=3002607
 ECPAY_HASH_KEY=pwFHCqoQZGmho4w6
-ECPAY_HASH_IV=EkRm7iFT261dpeov
+ECPAY_HASH_IV=EkRm7iFT261dpevs
 
 ```
 
