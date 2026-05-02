@@ -7,9 +7,13 @@ def generate_check_mac_value(params: dict) -> str:
     sorted_params = sorted(params.items())
     hash_key = os.getenv("ECPAY_HASH_KEY")
     hash_iv = os.getenv("ECPAY_HASH_IV")
+    ###
+    print(f"--- [DIAGNOSTIC] HashKey: {hash_key[:4]}***, HashIV: {hash_iv[:4]}***")
     raw_string = "&".join([f"{k}={v}" for k, v in sorted_params])
 
     full_string = f"HashKey={hash_key}&{raw_string}&HashIV={hash_iv}"
+    ###
+    print(f"--- [DIAGNOSTIC] RAW STRING: {full_string}")
     encoded_string = urllib.parse.quote_plus(full_string).lower()
     
     fixed_string = (
