@@ -128,7 +128,10 @@ MAIL_TO=customer@example.com
 # 綠界測試環境金鑰 (預設可直接使用測試帳號金鑰)
 ECPAY_MERCHANT_ID=3002607
 ECPAY_HASH_KEY=pwFHCqoQZGmho4w6
-ECPAY_HASH_IV=EkRm7iFT261dpeov
+ECPAY_HASH_IV=EkRm7iFT261dpevs
+
+CELERY_BROKER_URL=redis://redis:6379/0
+CELERY_RESULT_BACKEND=redis://redis:6379/0
 ```
 
 完成上述設定後，確保 uvicorn 伺服器與 ngrok 同時在運行:
