@@ -14,6 +14,7 @@ async def ecpay_webhook(request: Request, session: Session = Depends(get_session
     payload = dict(form_data)
     
     if not verify_ecpay_checksum(payload):
+        print("簽章驗證失敗")
         return "0|CheckMacValue Error"
 
     order_id = int(payload.get("CustomField1", 0))
@@ -25,6 +26,7 @@ async def ecpay_webhook(request: Request, session: Session = Depends(get_session
 
     if rtn_code == "1":
         order = session.get(Order, order_id)
+        print(f"資料庫查詢狀態 - 訂單: {order}, 狀態: {order.status if order else '找不到'}")
         
         if order and order.status == "pending":
             order.status = "paid"
@@ -33,5 +35,7 @@ async def ecpay_webhook(request: Request, session: Session = Depends(get_session
             
             process_payment_success_task.delay(order.id)
             print(f" [成功] 訂單 {order_id} 付款完成，已推送任務至 Celery Redis Broker。")
+        else:                                                                       # 👉 新增這行
+            print("❌ 條件不符！沒有觸發寄信 (可能是狀態不是 pending)")
             
     return "1|OK"
