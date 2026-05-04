@@ -135,7 +135,8 @@ CELERY_RESULT_BACKEND=redis://redis:6379/0
 ```
 
 完成上述設定後，確保 uvicorn 伺服器與 ngrok 同時在運行:
-前往 http://127.0.0.1:8000/docs 
+前往 http://54.252.216.152/docs
+
 測試完整的「下單 -> 綠界付款 -> Webhook 接收 -> 自動寄信」的完整金流循環。
 
 ### 測試
