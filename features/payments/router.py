@@ -4,14 +4,15 @@ from core.database import get_session
 
 from features.orders.models import Order
 from .ecpay_service import verify_ecpay_checksum
-from features.payments.tasks import process_payment_success_task # 引入 Celery Task
+from features.payments.tasks import process_payment_success_task
+import urllib.parse
 
 router = APIRouter(tags=["Payments"])
 
 @router.post("/webhooks/ecpay")
 async def ecpay_webhook(request: Request, session: Session = Depends(get_session)):
-    form_data = await request.form()
-    payload = dict(form_data)
+    body = await request.body()
+    payload = dict(urllib.parse.parse_qsl(body.decode('utf-8')))
     
     if not verify_ecpay_checksum(payload):
         print("簽章驗證失敗")
