@@ -9,7 +9,8 @@ redis_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
 celery_app = Celery(
     "payflow_tasks",
     broker=redis_url,
-    backend=redis_url
+    backend=redis_url,
+    include=["features.payments.tasks"]
 )
 
 celery_app.conf.update(
