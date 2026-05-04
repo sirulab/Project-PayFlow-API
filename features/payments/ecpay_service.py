@@ -4,9 +4,9 @@ import urllib.parse
 from datetime import datetime, timedelta, timezone
 
 def generate_check_mac_value(params: dict) -> str:
-    sorted_params = sorted(params.items())
-    hash_key = os.getenv("ECPAY_HASH_KEY")
-    hash_iv = os.getenv("ECPAY_HASH_IV")
+    sorted_params = sorted(params.items(), key=lambda x: x[0].lower())
+    hash_key = os.getenv("ECPAY_HASH_KEY", "").strip()
+    hash_iv = os.getenv("ECPAY_HASH_IV", "").strip()
     ###
     print(f"--- [DIAGNOSTIC] HashKey: {hash_key[:4]}***, HashIV: {hash_iv[:4]}***")
     raw_string = "&".join([f"{k}={v}" for k, v in sorted_params])
@@ -25,6 +25,7 @@ def generate_check_mac_value(params: dict) -> str:
         .replace("%28", "(")
         .replace("%29", ")")
         .replace("%20", "+")
+        .replace("~", "%7e")
     )
     return hashlib.sha256(fixed_string.encode('utf-8')).hexdigest().upper()
 
@@ -51,7 +52,7 @@ def create_ecpay_params(order_id: int, amount: int, item_name: str):
     return params
 
 def verify_ecpay_checksum(params: dict) -> bool:
-    test_params = params.copy()
-    received_mac = test_params.pop("CheckMacValue", None)
+    test_params = {k: v for k, v in params.items() if k.lower() != "checkmacvalue"}
+    received_mac = params.get("CheckMacValue") or params.get("checkmacvalue")
     if not received_mac: return False
     return generate_check_mac_value(test_params) == received_mac
