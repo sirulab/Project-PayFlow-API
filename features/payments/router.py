@@ -36,7 +36,7 @@ async def ecpay_webhook(request: Request, session: Session = Depends(get_session
             
             process_payment_success_task.delay(order.id)
             print(f" [成功] 訂單 {order_id} 付款完成，已推送任務至 Celery Redis Broker。")
-        else:                                                                       # 👉 新增這行
-            print("❌ 條件不符！沒有觸發寄信 (可能是狀態不是 pending)")
+        else:
+            print("條件不符！沒有觸發寄信 (狀態不是 pending)")
             
     return "1|OK"
