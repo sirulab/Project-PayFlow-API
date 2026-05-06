@@ -8,7 +8,7 @@ Project-PayFlow-API 是一個輕量級的微型電商與金流整合後端 API �
 
 目前系統運行於 AWS 測試機上。測試完整的「下單 -> 綠界付款 -> Webhook 接收 -> 自動寄信」的完整金流循環：
 
-a. 打開瀏覽器前往：http://54.252.216.152/docs (Swagger UI)
+a. 打開瀏覽器前往：https://payflow-api.sirulab.com/docs (old: http://54.252.216.152/docs) (Swagger UI)
 
 b. 發起訂單
 
@@ -27,7 +27,7 @@ c. 本地端的test.html
     <input type="hidden" name="TotalAmount" value="1000">
     <input type="hidden" name="TradeDesc" value="Mini Ecommerce Order">
     <input type="hidden" name="ItemName" value="chair">
-    <input type="hidden" name="ReturnURL" value="http://54.252.216.152/webhooks/ecpay">
+    <input type="hidden" name="ReturnURL" value="https://payflow-api.sirulab.com/webhooks/ecpay">
     <input type="hidden" name="ChoosePayment" value="ALL">
     <input type="hidden" name="EncryptType" value="1">
     <input type="hidden" name="CustomField1" value="14">
@@ -166,7 +166,7 @@ c. 終端機會顯示一段類似 https://a1b2-34-56-78-90.ngrok-free.app 的 ng
 * **5. 設定環境變數**
 
 a. 根據 .env 檔案，以及終端機顯示的 ngrok 網址填入 HOST_URL
-b. uvicorn 伺服器與 ngrok 同時在運行: 前往 http://54.252.216.152/docs
+b. uvicorn 伺服器與 ngrok 同時在運行: 前往 https://payflow-api.sirulab.com/docs
 c. 測試完整的「下單 -> 綠界付款 -> Webhook 接收 -> 自動寄信」的完整金流循環。
 
 ### 待改進事項 (To-Do List)
