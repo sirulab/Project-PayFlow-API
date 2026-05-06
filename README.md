@@ -4,7 +4,7 @@ Project-PayFlow-API 是一個輕量級的微型電商與金流整合後端 API �
 實作現代非同步與事件驅動架構的核心概念：
 從建立商品 (Product)、產生訂單 (Order) 並自動串接綠界支付 (ECPay)，到接收 Webhook 處理付款狀態，以及非同步扣除庫存與寄發 Email 通知。
 
-### 快速體驗 (Live Demo)
+### 部屬網址 (Live Demo)
 
 目前系統運行於 AWS 測試機上。測試完整的「下單 -> 綠界付款 -> Webhook 接收 -> 自動寄信」的完整金流循環：
 
