@@ -4,6 +4,55 @@ Project-PayFlow-API 是一個輕量級的微型電商與金流整合後端 API �
 實作現代非同步與事件驅動架構的核心概念：
 從建立商品 (Product)、產生訂單 (Order) 並自動串接綠界支付 (ECPay)，到接收 Webhook 處理付款狀態，以及非同步扣除庫存與寄發 Email 通知。
 
+### 快速體驗 (Live Demo)
+
+目前系統運行於 AWS 測試機上。測試完整的「下單 -> 綠界付款 -> Webhook 接收 -> 自動寄信」的完整金流循環：
+
+a. 打開瀏覽器前往：http://54.252.216.152/docs (Swagger UI)
+
+b. 發起訂單
+
+在 /orders 端點中輸入商品資訊下訂單，系統會回傳一組綠界表單參數與 CheckMacValue。
+
+c. 本地端的test.html
+
+```
+<!-- 模擬前端跳轉 (POST) -->
+<form action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="POST">
+    <!-- API 回傳的 綠界表單參數與 CheckMacValue 全部寫成 input -->
+    <input type="hidden" name="MerchantID" value="3002607">
+    <input type="hidden" name="MerchantTradeNo" value="ORDER14T1777891050">
+    <input type="hidden" name="MerchantTradeDate" value="2026/05/04 18:37:30">
+    <input type="hidden" name="PaymentType" value="aio">
+    <input type="hidden" name="TotalAmount" value="1000">
+    <input type="hidden" name="TradeDesc" value="Mini Ecommerce Order">
+    <input type="hidden" name="ItemName" value="chair">
+    <input type="hidden" name="ReturnURL" value="http://54.252.216.152/webhooks/ecpay">
+    <input type="hidden" name="ChoosePayment" value="ALL">
+    <input type="hidden" name="EncryptType" value="1">
+    <input type="hidden" name="CustomField1" value="14">
+    <input type="hidden" name="CheckMacValue" value="21D3828464BFA1AA831FA569D2B8A1EBF65F37BDE4D6196C91176A0678AD****">
+    
+    <input type="submit" value="模擬前端跳轉 (POST)">
+</form>
+```
+
+d. (選用) 
+
+若需檢查參數與 CheckMacValue 是否吻合，可使用綠界官方模擬前端檢查工具: https://developersmock.ecpay.com.tw/?APIurl=https%3A%2F%2Fdevelopers.ecpay.com.tw%2F2864%2F
+
+e. 進行模擬付款
+
+https://developers.ecpay.com.tw/2856/
+使用綠界官方測試信用卡卡號（如 4311-9511-1111-1111）進行付款。
+
+f. 等待與驗證
+付款成功後，請等待約 10 分鐘。
+
+g. 檢查 API 狀態：使用 GET /products 檢查庫存是否正確扣除。
+
+h. 檢查信箱：登入 Mailtrap 檢查是否收到「付款成功確認信」。
+
 ### 核心功能 (Core Features)
 
 * **純 API 驅動設計**：提供 RESTful API 端點進行商品與訂單的建立，並利用 `FastAPI` 搭配 `python-multipart` 處理來自綠界 Webhook 的表單資料 (Form Data) 回傳。
@@ -86,16 +135,16 @@ pip install -r requirements.txt
 ```ini
 HOST_URL=http://your-ngrok-url.com
 
-# Email SMTP 設定
+# Email SMTP 設定 ( Mailtrap 註冊免費帳號獲取)
 MAIL_HOST=sandbox.smtp.mailtrap.io
 MAIL_PORT=2525
-MAIL_USER=fabc8bbb3dfc3e
-MAIL_PASSWORD=a328101e0a82d9
+MAIL_USER=your_mailtrap_username_here
+MAIL_PASSWORD=mailtrap_password_here
 MAIL_FROM=test@payflow.com
 MAIL_TO=customer@example.com
 
-# 綠界測試環境金鑰
-# 官方測試參數: https://developersmock.ecpay.com.tw/?APIurl=https%3A%2F%2Fdevelopers.ecpay.com.tw%2F2864%2F -> 加密金鑰設定
+# 綠界測試環境金鑰 (以下為官方公開測試用金鑰，可直接使用)
+# https://developersmock.ecpay.com.tw/?APIurl=https%3A%2F%2Fdevelopers.ecpay.com.tw%2F2864%2F -> 加密金鑰設定
 ECPAY_MERCHANT_ID=3002607
 ECPAY_HASH_KEY=pwFHCqoQZGmho4w6
 ECPAY_HASH_IV=EkRm7iFT261dpevs
@@ -119,55 +168,6 @@ c. 終端機會顯示一段類似 https://a1b2-34-56-78-90.ngrok-free.app 的 ng
 a. 根據 .env 檔案，以及終端機顯示的 ngrok 網址填入 HOST_URL
 b. uvicorn 伺服器與 ngrok 同時在運行: 前往 http://54.252.216.152/docs
 c. 測試完整的「下單 -> 綠界付款 -> Webhook 接收 -> 自動寄信」的完整金流循環。
-
-### AWS 測試環節與驗證步驟
-
-目前系統運行於 AWS 測試機上。測試完整的「下單 -> 綠界付款 -> Webhook 接收 -> 自動寄信」的完整金流循環：
-
-a. 打開瀏覽器前往：http://54.252.216.152/docs (Swagger UI)
-
-b. 發起訂單
-
-在 /orders 端點中輸入商品資訊下訂單，系統會回傳一組綠界表單參數與 CheckMacValue。
-
-c. 本地端的test.html
-
-```
-<!-- 模擬前端跳轉 (POST) -->
-<form action="https://payment-stage.ecpay.com.tw/Cashier/AioCheckOut/V5" method="POST">
-    <!-- API 回傳的 綠界表單參數與 CheckMacValue 全部寫成 input -->
-    <input type="hidden" name="MerchantID" value="3002607">
-    <input type="hidden" name="MerchantTradeNo" value="ORDER14T1777891050">
-    <input type="hidden" name="MerchantTradeDate" value="2026/05/04 18:37:30">
-    <input type="hidden" name="PaymentType" value="aio">
-    <input type="hidden" name="TotalAmount" value="1000">
-    <input type="hidden" name="TradeDesc" value="Mini Ecommerce Order">
-    <input type="hidden" name="ItemName" value="chair">
-    <input type="hidden" name="ReturnURL" value="http://54.252.216.152/webhooks/ecpay">
-    <input type="hidden" name="ChoosePayment" value="ALL">
-    <input type="hidden" name="EncryptType" value="1">
-    <input type="hidden" name="CustomField1" value="14">
-    <input type="hidden" name="CheckMacValue" value="21D3828464BFA1AA831FA569D2B8A1EBF65F37BDE4D6196C91176A0678AD****">
-    
-    <input type="submit" value="模擬前端跳轉 (POST)">
-</form>
-```
-
-d. (選用) 
-
-若需檢查參數與 CheckMacValue 是否吻合，可使用綠界官方模擬前端檢查工具: https://developersmock.ecpay.com.tw/?APIurl=https%3A%2F%2Fdevelopers.ecpay.com.tw%2F2864%2F
-
-e. 進行模擬付款
-
-https://developers.ecpay.com.tw/2856/
-使用綠界官方測試信用卡卡號（如 4311-9511-1111-1111）進行付款。
-
-f. 等待與驗證
-付款成功後，請等待約 10 分鐘。
-
-g. 檢查 API 狀態：使用 GET /products 檢查庫存是否正確扣除。
-
-h. 檢查信箱：登入 Mailtrap 檢查是否收到「付款成功確認信」。
 
 ### 待改進事項 (To-Do List)
 
