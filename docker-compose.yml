@@ -10,7 +10,6 @@ services:
       - redis
     env_file:
       - .env
-    # 🔴 新增：將共用磁碟掛載到容器內的 /app/data
     volumes:
       - sqlite_data:/app/data
 
@@ -21,7 +20,6 @@ services:
       - redis
     env_file:
       - .env
-    # 🔴 新增：Worker 也掛載同一個共用磁碟
     volumes:
       - sqlite_data:/app/data
 
