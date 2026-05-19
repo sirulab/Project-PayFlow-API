@@ -1,0 +1,25 @@
+name: CD Pipeline - Build Docker Image
+
+# 觸發條件：只有在 main 分支 push，且通常是 CI 測試通過後才打包
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Build Docker Image (Dry Run)
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        push: false  # 這裡設為 false: 打包測試，不推送到 DockerHub
+        tags: payflow-api:latest
