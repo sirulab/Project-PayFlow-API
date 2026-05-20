@@ -13,6 +13,7 @@ def session_fixture():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool
     )
+    # StaticPool vs SQLite/ aiosqlite/ PostgreSQL (Testcontainers)
     SQLModel.metadata.create_all(engine)
     with Session(engine) as session:
         yield session
