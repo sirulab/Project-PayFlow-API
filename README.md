@@ -97,12 +97,13 @@ Project-PayFlow-API/
 │       ├── ecpay_service.py  # 綠界加密與參數計算
 │       └── tasks.py          # Celery 背景任務 (扣庫存、寄信)
 ├── tests/
+│   ├── conftest.py
 │   ├── unit/                         
 │   │   ├── test_ecpay_crypto.py       
 │   │   ├── test_models.py
 │   └── integration/                   
 │       ├── test_order_endpoint.py     # 測試下單 API
-│       ├── test_webhook_flow.py       # 測試金流回傳與扣庫存
+│       └── test_webhook_flow.py       # 測試金流回傳與扣庫存
 ├── main.py                 
 ├── docker-compose.yml      
 ├── Dockerfile              
