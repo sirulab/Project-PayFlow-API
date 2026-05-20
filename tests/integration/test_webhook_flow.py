@@ -6,7 +6,7 @@ from features.products.models import Product
 from features.orders.models import Order
 
 # Webhook 接收 + 時間差問題
-def test_ecpay_webhook_success_and_log(client: TestClient, session: Session, caplog):
+def test_ecpay_webhook_success_and_log(client: TestClient, session: Session, capsys):
     """
     測試情境：綠界回傳付款成功 (RtnCode=1)，更新訂單狀態並call非同步任務
     """
@@ -45,7 +45,8 @@ def test_ecpay_webhook_success_and_log(client: TestClient, session: Session, cap
 
 #  測試非同步任務: 扣庫存與寄信
 
-def test_process_payment_success_task(session: Session, caplog):
+def test_process_payment_success_task(session: Session, capsys):
+    # from caplog to capsys
     """
     測試情境：Celery 任務執行，正確扣除庫存+call寄信
     """
