@@ -7,7 +7,11 @@ from core.database import get_session
 @pytest.fixture(name="session")
 def session_fixture():
     # 每次測試乾淨
-    engine = create_engine("sqlite:///:memory:")
+    engine = create_engine(
+        "sqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool
+    )
     SQLModel.metadata.create_all(engine)
     with Session(engine) as session:
         yield session
