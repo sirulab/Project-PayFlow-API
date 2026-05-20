@@ -38,7 +38,9 @@ def test_ecpay_webhook_success_and_log(client: TestClient, session: Session, cap
         
         assert mock_celery_delay.called
         mock_celery_delay.assert_called_once_with(order.id)
-        assert "付款完成，已推送任務至 Celery" in caplog.text
+             
+        captured = capsys.readouterr()
+        assert "付款完成，已推送任務至 Celery" in captured.out
 
 
 #  測試非同步任務: 扣庫存與寄信
@@ -66,5 +68,8 @@ def test_process_payment_success_task(session: Session, caplog):
         
         session.refresh(product)
         assert product.stock == 4
-        assert "剩餘庫存 4" in caplog.text
+             
+        captured = capsys.readouterr()
+        assert "剩餘庫存 4" in captured.out
+
         assert mock_email.called
