@@ -1,20 +1,11 @@
-# tests/test_api.py
-import pytest
-from fastapi.testclient import TestClient
-from main import app
 from features.payments.ecpay_service import generate_check_mac_value
-import os
 
-client = TestClient(app)
-
-# 測試 1: 確保 API 伺服器是否正常啟動且路由是否存在
-def test_read_docs():
+def test_read_docs(client):
     response = client.get("/docs")
     assert response.status_code == 200
 
-# 測試 2: 測試綠界金流的 CheckMacValue 雜湊演算法是否正確
 def test_ecpay_checksum_generation(monkeypatch):
-    # 模擬環境變數，避免依賴真實的 .env 檔案
+    # 模擬環境變數
     monkeypatch.setenv("ECPAY_HASH_KEY", "pwFHCqoQZGmho4w6")
     monkeypatch.setenv("ECPAY_HASH_IV", "EkRm7iFT261dpeov")
     
@@ -25,10 +16,8 @@ def test_ecpay_checksum_generation(monkeypatch):
         "TradeDesc": "Test Item"
     }
     
-    # 演算法
     mac_value = generate_check_mac_value(mock_params)
     
-    # 斷言：確保產出的字串是 SHA256 加密後的實例，長度64，大寫
     assert isinstance(mac_value, str)
-    assert len(mac_value) == 64           # SHA256 長度為 64
-    assert mac_value.isupper() 
+    assert len(mac_value) == 64
+    assert mac_value.isupper()
