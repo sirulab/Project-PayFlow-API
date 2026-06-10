@@ -20,5 +20,5 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         context: .
-        push: false  # 這裡設為 false: 打包測試，不推送到 DockerHub
+        push: false
         tags: payflow-api:latest
