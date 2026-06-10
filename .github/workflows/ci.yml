@@ -1,6 +1,5 @@
 name: CI Pipeline
 
-# 觸發條件： PR 提交到 main，或是直接 push 到 main 時執行
 on:
   push:
     branches: [ "main" ]
