@@ -28,6 +28,5 @@ services:
     ports:
       - "6379:6379"
 
-# 🔴 新增：定義共用磁碟名稱
 volumes:
   sqlite_data:
