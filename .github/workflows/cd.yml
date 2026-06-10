@@ -1,6 +1,5 @@
 name: CD Pipeline - Build Docker Image
 
-# 觸發條件：只有在 main 分支 push，且通常是 CI 測試通過後才打包
 on:
   push:
     branches: [ "main" ]
