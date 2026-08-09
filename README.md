@@ -8,7 +8,7 @@ Project-PayFlow-API 是一個輕量級的微型電商與金流整合後端 API �
 
 目前系統運行於 AWS 測試機上。測試完整的「下單 -> 綠界付款 -> Webhook 接收 -> 自動寄信」的完整金流循環：
 
-a. 打開瀏覽器前往：https://payflow-api.sirulab.com/docs (old: http://54.252.216.152/docs) (Swagger UI)
+a. 打開瀏覽器前往：https://payflow-api.sirulab.com/docs (Swagger UI)
 
 b. 發起訂單
 
