@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-redis_url = os.getenv("REDIS_URL")
+redis_url = "redis://redis:6379/0"
 
 celery_app = Celery(
     "payflow_tasks",
