@@ -17,9 +17,9 @@ services:
     command: celery -A core.celery_app worker --loglevel=info
     depends_on:
       - redis
-    env_file:
-      - .env
     restart: always
 
   redis:
     image: redis:alpine
+    ports:
+      - "6379:0"    
