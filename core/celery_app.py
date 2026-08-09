@@ -1,10 +1,6 @@
 from celery import Celery
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
-
-redis_url = "redis://redis:6379/0"
+redis_url = "redis://redis:6379/0" 
 
 celery_app = Celery(
     "payflow_tasks",
